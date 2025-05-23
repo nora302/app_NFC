@@ -8,7 +8,6 @@ DB_PATH = 'citizens.db'
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    # Création de la table si elle n'existe pas
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS mitarbeiter (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,7 +19,6 @@ def init_db():
         bild TEXT
     )
     ''')
-    # Vérifie si la table est vide
     cursor.execute("SELECT COUNT(*) FROM mitarbeiter")
     count = cursor.fetchone()[0]
     if count == 0:
@@ -39,26 +37,4 @@ def init_db():
 def get_mitarbeiter_data(barcode):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild FROM mitarbeiter WHERE UID = ?", (barcode,))
-    data = cursor.fetchone()
-    conn.close()
-    return data
-
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    mitarbeiter = None
-    error = None
-    if request.method == 'POST':
-        barcode = request.form.get('barcode', '').strip()
-        if barcode:
-            mitarbeiter = get_mitarbeiter_data(barcode)
-            if not mitarbeiter:
-                error = "❌ Mitarbeiter nicht gefunden."
-        else:
-            error = "Le champ UID est vide."
-    return render_template('home.html', mitarbeiter=mitarbeiter, error=error)
-
-if __name__ == '__main__':
-    init_db()  # <-- IMPORTANT : création / insertion dans la base avant de lancer le serveur
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild F

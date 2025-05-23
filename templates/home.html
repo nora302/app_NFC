@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8" />
-    <title>Mitarbeiter Suche</title>
+    <title>Mitarbeiter Suche & Hinzufügen</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,6 +24,7 @@
             padding: 10px 15px;
             font-size: 16px;
             cursor: pointer;
+            margin-right: 10px;
         }
         .result {
             border: 1px solid #ccc;
@@ -42,19 +43,29 @@
             color: red;
             font-weight: bold;
         }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>Mitarbeiter-Suche</h1>
+    <h1>Mitarbeiter Suche & Hinzufügen</h1>
 
     <form method="POST">
         <label for="barcode">UID scannen oder eingeben:</label><br />
-        <input type="text" name="barcode" id="barcode" required />
-        <button type="submit">Suchen</button>
+        <input type="text" name="barcode" id="barcode" required /><br /><br />
+
+        <button type="submit" name="action" value="search">Suchen</button>
+        <button type="submit" name="action" value="add">Hinzufügen</button>
     </form>
 
     {% if error %}
         <p class="error">{{ error }}</p>
+    {% endif %}
+    
+    {% if success %}
+        <p class="success">{{ success }}</p>
     {% endif %}
 
     {% if mitarbeiter %}
