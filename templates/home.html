@@ -64,8 +64,10 @@
                 <img src="{{ url_for('static', filename='photos/' ~ mitarbeiter[4]) }}" alt="Mitarbeiterfoto" />
             </p>
         </div>
-    {% elif request.method == 'POST' %}
-        <p class="error">❌ Mitarbeiter nicht gefunden.</p>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
     {% endif %}
 </body>
 </html>
