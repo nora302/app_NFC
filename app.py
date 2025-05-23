@@ -37,4 +37,48 @@ def init_db():
 def get_mitarbeiter_data(barcode):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild F
+    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild FROM mitarbeiter WHERE UID = ?", (barcode,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    mitarbeiter = None
+    error = None
+    success = None
+    if request.method == 'POST':
+        action = request.form.get('action')
+        barcode = request.form.get('barcode', '').strip()
+        
+        if action == 'search':
+            if barcode:
+                mitarbeiter = get_mitarbeiter_data(barcode)
+                if not mitarbeiter:
+                    error = "❌ Mitarbeiter nicht gefunden."
+            else:
+                error = "UID Feld ist leer."
+        
+        elif action == 'add':
+            if barcode:
+                try:
+                    conn = sqlite3.connect(DB_PATH)
+                    cursor = conn.cursor()
+                    cursor.execute('''
+                        INSERT INTO mitarbeiter (UID, vorname, nachname, adresse, telefonnummer, bild)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (barcode, 'Neu', 'Mitarbeiter', 'Adresse', '0000000000', 'default.jpg'))
+                    conn.commit()
+                    conn.close()
+                    success = "✅ Neuer Mitarbeiter erfolgreich hinzugefügt."
+                except sqlite3.IntegrityError:
+                    error = "❌ Mitarbeiter mit dieser UID existiert bereits."
+            else:
+                error = "UID Feld ist leer."
+                
+    return render_template('home.html', mitarbeiter=mitarbeiter, error=error, success=success)
+
+if __name__ == '__main__':
+    init_db()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
