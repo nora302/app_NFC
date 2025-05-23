@@ -53,6 +53,10 @@
         <button type="submit">Suchen</button>
     </form>
 
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
     {% if mitarbeiter %}
         <div class="result">
             <h2>Informationen zum Mitarbeiter</h2>
@@ -61,13 +65,9 @@
             <p><strong>Adresse:</strong> {{ mitarbeiter[2] }}</p>
             <p><strong>Telefonnummer:</strong> {{ mitarbeiter[3] }}</p>
             <p><strong>Bild:</strong><br />
-                <img src="{{ url_for('static', filename='photos/' ~ mitarbeiter[4]) }}" alt="Mitarbeiterfoto" />
+                <img src="{{ url_for('static', filename='photos/' + mitarbeiter[4]) }}" alt="Mitarbeiterfoto" />
             </p>
         </div>
-    {% endif %}
-
-    {% if error %}
-        <p class="error">{{ error }}</p>
     {% endif %}
 </body>
 </html>
