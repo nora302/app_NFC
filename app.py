@@ -14,15 +14,12 @@ def get_mitarbeiter_data(barcode):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    mitarbeiter = None
     if request.method == 'POST':
-        barcode = request.form['barcode']
+        barcode = request.form.get('barcode', '')
         mitarbeiter = get_mitarbeiter_data(barcode)
-        if mitarbeiter:
-            return render_template('result.html', mitarbeiter=mitarbeiter)
-        else:
-            return "Mitarbeiter nicht gefunden."
-    return render_template('home.html')
+    return render_template('home.html', mitarbeiter=mitarbeiter)
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 50000))
+    app.run(host='0.0.0.0', port=port, debug=True)

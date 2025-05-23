@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Mitarbeiter Suche</title>
     <style>
         body {
@@ -36,6 +36,7 @@
             max-width: 100px;
             height: auto;
             border: 1px solid #ddd;
+            margin-top: 10px;
         }
         .error {
             color: red;
@@ -47,22 +48,22 @@
     <h1>Mitarbeiter-Suche</h1>
 
     <form method="POST">
-        <label for="barcode">UID scannen oder eingeben:</label><br>
-        <input type="text" name="barcode" id="barcode" required>
+        <label for="barcode">UID scannen oder eingeben:</label><br />
+        <input type="text" name="barcode" id="barcode" required />
         <button type="submit">Suchen</button>
     </form>
 
     {% if mitarbeiter %}
-    <div class="result">
-        <h2>Informationen zum Mitarbeiter</h2>
-        <p><strong>Vorname:</strong> {{ mitarbeiter[0] }}</p>
-        <p><strong>Nachname:</strong> {{ mitarbeiter[1] }}</p>
-        <p><strong>Adresse:</strong> {{ mitarbeiter[2] }}</p>
-        <p><strong>Telefonnummer:</strong> {{ mitarbeiter[3] }}</p>
-        <p><strong>Bild:</strong><br>
-            <img src="{{ url_for('static', filename='photos/' ~ mitarbeiter[4]) }}" alt="Mitarbeiterfoto">
-        </p>
-    </div>
+        <div class="result">
+            <h2>Informationen zum Mitarbeiter</h2>
+            <p><strong>Vorname:</strong> {{ mitarbeiter[0] }}</p>
+            <p><strong>Nachname:</strong> {{ mitarbeiter[1] }}</p>
+            <p><strong>Adresse:</strong> {{ mitarbeiter[2] }}</p>
+            <p><strong>Telefonnummer:</strong> {{ mitarbeiter[3] }}</p>
+            <p><strong>Bild:</strong><br />
+                <img src="{{ url_for('static', filename='photos/' ~ mitarbeiter[4]) }}" alt="Mitarbeiterfoto" />
+            </p>
+        </div>
     {% elif request.method == 'POST' %}
         <p class="error">❌ Mitarbeiter nicht gefunden.</p>
     {% endif %}
