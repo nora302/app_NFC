@@ -34,10 +34,10 @@ def init_db():
         conn.commit()
     conn.close()
 
-def get_mitarbeiter_data(barcode):
+def get_mitarbeiter_data(uid):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild FROM mitarbeiter WHERE UID = ?", (barcode,))
+    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild FROM mitarbeiter WHERE UID = ?", (uid,))
     data = cursor.fetchone()
     conn.close()
     return data
@@ -47,6 +47,16 @@ def home():
     mitarbeiter = None
     error = None
     success = None
+
+    # --- NFC tag UID handling from URL ---
+    uid_param = request.args.get('uid')
+    if uid_param:
+        mitarbeiter = get_mitarbeiter_data(uid_param)
+        if not mitarbeiter:
+            error = "❌ Mitarbeiter mit diesem UID wurde nicht gefunden."
+        return render_template('home.html', mitarbeiter=mitarbeiter, error=error, success=success)
+
+    # --- Form handling ---
     if request.method == 'POST':
         action = request.form.get('action')
         barcode = request.form.get('barcode', '').strip()
@@ -75,7 +85,7 @@ def home():
                     error = "❌ Mitarbeiter mit dieser UID existiert bereits."
             else:
                 error = "UID Feld ist leer."
-                
+
     return render_template('home.html', mitarbeiter=mitarbeiter, error=error, success=success)
 
 if __name__ == '__main__':
