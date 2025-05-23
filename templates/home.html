@@ -1,11 +1,70 @@
-<!doctype html>
-<html>
-<head><title>Recherche Citoyen</title></head>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Mitarbeiter Suche</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 20px;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            border: 1px solid #ddd;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
 <body>
-    <h2>Entrer le code-barres du citoyen :</h2>
-    <form method="post">
-        <input type="text" name="barcode" required>
-        <button type="submit">Rechercher</button>
+    <h1>Mitarbeiter-Suche</h1>
+
+    <form method="POST">
+        <label for="barcode">UID scannen oder eingeben:</label><br>
+        <input type="text" name="barcode" id="barcode" required>
+        <button type="submit">Suchen</button>
     </form>
+
+    {% if mitarbeiter %}
+    <div class="result">
+        <h2>Informationen zum Mitarbeiter</h2>
+        <p><strong>Vorname:</strong> {{ mitarbeiter[0] }}</p>
+        <p><strong>Nachname:</strong> {{ mitarbeiter[1] }}</p>
+        <p><strong>Adresse:</strong> {{ mitarbeiter[2] }}</p>
+        <p><strong>Telefonnummer:</strong> {{ mitarbeiter[3] }}</p>
+        <p><strong>Bild:</strong><br>
+            <img src="{{ url_for('static', filename='photos/' ~ mitarbeiter[4]) }}" alt="Mitarbeiterfoto">
+        </p>
+    </div>
+    {% elif request.method == 'POST' %}
+        <p class="error">❌ Mitarbeiter nicht gefunden.</p>
+    {% endif %}
 </body>
 </html>

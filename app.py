@@ -4,10 +4,10 @@ import os
 
 app = Flask(__name__)
 
-def get_citizen_data(barcode):
+def get_mitarbeiter_data(barcode):
     conn = sqlite3.connect('citizens.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT vorname, nachname, adresse,telefonnummer, bild FROM citoyens WHERE UID=?", (barcode,))
+    cursor.execute("SELECT vorname, nachname, adresse, telefonnummer, bild FROM mitarbeiter WHERE UID = ?", (barcode,))
     data = cursor.fetchone()
     conn.close()
     return data
@@ -16,11 +16,11 @@ def get_citizen_data(barcode):
 def home():
     if request.method == 'POST':
         barcode = request.form['barcode']
-        citizen = get_citizen_data(barcode)
-        if citizen:
-            return render_template('result.html', citizen=citizen)
+        mitarbeiter = get_mitarbeiter_data(barcode)
+        if mitarbeiter:
+            return render_template('result.html', mitarbeiter=mitarbeiter)
         else:
-            return "Citoyen non trouvé."
+            return "Mitarbeiter nicht gefunden."
     return render_template('home.html')
 
 if __name__ == '__main__':

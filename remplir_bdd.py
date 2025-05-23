@@ -4,9 +4,9 @@ import sqlite3
 conn = sqlite3.connect('citizens.db')
 cursor = conn.cursor()
 
-# Création de la table s'il n'existe pas déjà
+# Création de la table mitarbeiter s'il n'existe pas déjà
 cursor.execute('''
-CREATE TABLE IF NOT EXISTS citoyens (
+CREATE TABLE IF NOT EXISTS mitarbeiter (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     UID TEXT,
     vorname TEXT,
@@ -17,19 +17,19 @@ CREATE TABLE IF NOT EXISTS citoyens (
 )
 ''')
 
-# Insert mitarbeiter
-mitarbeiter = [
-    ("04A5A10AAF0590", "Hanane", "Aidouni", "köngen", "01792983523", "hanane.jpg"),
-    ("04A5A10AAF0591", "Marc", "Wilms", " Stuttgart", "01782983522", "marc.jpg"),
-    ("04A5A11AAF0590", "laura", "Müller", "wenndlingen", "01782983511", "laura.jpg")
+# Données des mitarbeiter
+mitarbeiter_daten = [
+    ("04A5A10AAF0590", "Hanane", "Aidouni", "Köngen", "01792983523", "hanane.jpg"),
+    ("04A5A10AAF0591", "Marc", "Wilms", "Stuttgart", "01782983522", "marc.jpg"),
+    ("04A5A11AAF0590", "Laura", "Müller", "Wendlingen", "01782983511", "laura.jpg")
 ]
 
 cursor.executemany('''
-    INSERT INTO mitarbeiter (UID, vorname, nachname, adresse, telefonnummer , bild)
+    INSERT INTO mitarbeiter (UID, vorname, nachname, adresse, telefonnummer, bild)
     VALUES (?, ?, ?, ?, ?, ?)
-''', mitarbeiter)
+''', mitarbeiter_daten)
 
 conn.commit()
 conn.close()
 
-print("✅ Die Datenbank wurde erfolgreich befüllt")
+print("✅ Die Datenbank wurde erfolgreich mit Mitarbeiter-Daten befüllt.")
